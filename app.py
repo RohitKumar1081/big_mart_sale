@@ -1,15 +1,46 @@
+from flask import Flask, render_template, request, redirect, url_for, flash, session
+from werkzeug.security import check_password_hash
+
 from flask import Flask,request, render_template
 import numpy as np
 import pickle
 import sklearn
 #loading models
 model = pickle.load(open('model.pkl','rb'))
-#flask app
-app = Flask(__name__)
 
-@app.route('/')
-def index():
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Used for session management and flash messages
+
+# Dummy user database for demonstration (use a real DB in production)
+users_db = {
+    "sgtbmit@gmail.com": {"password": "123"}  # Example username/password
+}
+
+@app.route('/', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']  # Get the username from form
+        password = request.form['password']  # Get the password from form
+        remember_me = 'remember_me' in request.form  # Check if "Remember Me" is checked
+
+        # Check if user exists in the dummy database
+        if username in users_db and users_db[username]['password'] == password:
+            session['username'] = username  # Store username in session
+            flash('Login successful!', 'success')  # Flash a success message
+            return redirect(url_for('dashboard'))
+        else:
+            flash('Invalid credentials, please try again.', 'danger')
+
+    return render_template('index1.html')
+
+@app.route('/dashboard')
+def dashboard():
+    if 'username' not in session:
+        return redirect(url_for('login'))
     return render_template('index.html')
+    return f"Welcome to the dashboard, {session['username']}!"
+
+
 @app.route("/predict",methods=['POST'])
 def predict():
     if request.method == 'POST':
@@ -32,5 +63,5 @@ def predict():
         print(prediction)
         return render_template('index.html',prediction = prediction)
 
-if __name__=="__main__":
+if __name__ == '__main__':
     app.run(debug=True)
