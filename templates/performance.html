@@ -12,15 +12,17 @@
         <br>
         <div class="card text-white border-0">
             <div class="card-body">
-                <h2 class="text-center text-custom">Model Performance</h2>
-                <p><strong>R-squared Score:</strong> {{ r2_score }}</p>
-                <p><strong>Mean Absolute Error (MAE):</strong> {{ mae }}</p>
-                <p><strong>Overall Accuracy:</strong> {{ accuracy }}%</p>
+                <h2 class="text-center text-custom" style="color:black;" >Model Performance</h2>
+                <p style="color:black;"><strong>R-squared Score:</strong> {{ r2_score }}</p>
+                <p style="color:black;"><strong>Mean Absolute Error (MAE):</strong> {{ mae }}</p>
+                <p style="color:black;"><strong>Overall Accuracy:</strong> {{ overall_accuracy }}%</p>
                 <br>
-                <h3 class="text-center text-custom">Predictions vs Actual Values</h3>
-                <div class="text-center">
-                    <img src="data:image/png;base64,{{ plot_img }}" alt="Model Performance Graph">
-                </div>
+                <h3 class="text-center text-custom" style="color:black;">Predictions vs Actual Values</h3>
+                {% if plot_url %}
+                    <div class="text-center">
+                        <img src="data:image/png;base64,{{ plot_url }}" alt="Model Performance Graph">
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
