@@ -9,7 +9,10 @@ import base64
 import pandas as pd
 
 # Loading the trained model
-model = pickle.load(open('model.pkl', 'rb'))
+import os
+model_path = os.path.join(os.path.dirname(__file__), 'model.pkl')
+model = pickle.load(open(model_path, 'rb'))
+# model = pickle.load(open('model.pkl', 'rb'))
 
 # Initialize Flask app
 app = Flask(__name__)
